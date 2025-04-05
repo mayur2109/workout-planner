@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PPL Dumbbell Workout Tracker (5kg)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .container {
+            max-width: 700px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1, h2 {
+            color: #0056b3;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .button-nav {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        .button-nav button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+        }
+        .button-nav button:hover, .button-nav button.active {
+            background-color: #0056b3;
+        }
+        .workout-content {
+            border: 1px solid #eee;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #fdfdfd;
+        }
+        .workout-content h3 {
+            margin-top: 0;
+            color: #007bff;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            margin-bottom: 18px;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        li strong {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-size: 1.1em;
+        }
+        li span {
+            font-size: 0.95em;
+            color: #555;
+        }
+        .note {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 15px;
+            padding: 10px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+        }
+        .footer-note {
+            text-align: center;
+            margin-top: 30px;
+            font-size: 0.85em;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>PPL Dumbbell Workout Plan (2x 5kg)</h1>
+        <p class="note"><strong>Important:</strong> 5kg is light. Focus on high reps (15-25+), slow controlled movements, short rests (45-60s), and feeling the muscle work. Fat loss requires a caloric deficit through diet.</p>
+
+        <div class="button-nav">
+            <button id="btn-push" onclick="showWorkout('Push')">Push Day</button>
+            <button id="btn-pull" onclick="showWorkout('Pull')">Pull Day</button>
+            <button id="btn-legs" onclick="showWorkout('Legs')">Legs Day</button>
+        </div>
+
+        <div id="workout-display" class="workout-content">
+            <h2>Select a Workout Day Above</h2>
+            <p>This plan uses a Push-Pull-Legs split. Cycle through the days, resting when needed (e.g., PPL Rest PPL Rest, or PPL Rest Rest). Remember to warm up before and cool down after each session.</p>
+             <p><strong>Remember: Consistency and proper nutrition are key for results!</strong></p>
+       </div>
+    </div>
+
+     <div class="footer-note container">
+        Disclaimer: Consult a healthcare professional before starting any new workout or diet plan. Adjust based on your body's response.
+     </div>
+
+    <script>
+        const workouts = {
+            Push: {
+                title: "Push Day (Chest, Shoulders, Triceps)",
+                exercises: [
+                    { name: "Dumbbell Floor Press", details: "3-4 sets / 15-25+ reps / 45-60s rest" },
+                    { name: "Push-ups", details: "3-4 sets / AMRAP (As Many Reps As Possible) / 60s rest (Use knee or incline variation if needed)" },
+                    { name: "Dumbbell Standing Overhead Press", details: "3-4 sets / 15-25+ reps / 45-60s rest" },
+                    { name: "Dumbbell Lateral Raises", details: "3 sets / 15-25+ reps / 45s rest (Focus on control, not momentum)" },
+                    { name: "Dumbbell Front Raises", details: "3 sets / 15-25+ reps / 45s rest (Alternate arms or both together)" },
+                    { name: "Dumbbell Overhead Triceps Extension", details: "3 sets / 15-25+ reps / 45s rest (Use one DB held with both hands)" }
+                ]
+            },
+            Pull: {
+                title: "Pull Day (Back, Biceps, Rear Delts)",
+                exercises: [
+                    { name: "Bent-Over Dumbbell Rows", details: "3-4 sets / 15-25+ reps / 45-60s rest (Keep back straight!)" },
+                    { name: "Dumbbell Pullovers (Floor)", details: "3 sets / 15-20 reps / 60s rest (Use ONE DB, focus on stretch)" },
+                    { name: "Bent-Over Reverse Flyes", details: "3 sets / 15-25+ reps / 45s rest (Squeeze rear shoulders)" },
+                    { name: "Dumbbell Bicep Curls", details: "3-4 sets / 15-25+ reps / 45s rest (Keep elbows tucked)" },
+                    { name: "Dumbbell Hammer Curls", details: "3 sets / 15-25+ reps / 45s rest (Palms face inwards)" },
+                    { name: "Renegade Rows (Optional)", details: "3 sets / 10-15 reps per side / 60s rest (Focus on core stability, skip if too hard)" }
+                ]
+            },
+            Legs: {
+                title: "Legs Day (Quads, Hamstrings, Glutes, Calves)",
+                exercises: [
+                    { name: "Dumbbell Goblet Squat", details: "3-4 sets / 15-25+ reps / 60s rest (Hold ONE DB vertically at chest)" },
+                    { name: "Dumbbell Romanian Deadlifts (RDLs)", details: "3-4 sets / 15-25+ reps / 60s rest (Hinge at hips, feel hamstring stretch)" },
+                    { name: "Dumbbell Lunges", details: "3 sets / 10-20 reps per leg / 60s rest (Alternate legs)" },
+                    { name: "Glute Bridges", details: "3 sets / 20-30+ reps / 45s rest (Optional: Place DBs on hips)" },
+                    { name: "Standing Calf Raises", details: "3 sets / 20-30+ reps / 45s rest (Hold DBs at sides, rise onto toes)" }
+                ]
+            }
+        };
+
+        const display = document.getElementById('workout-display');
+        const buttons = {
+            Push: document.getElementById('btn-push'),
+            Pull: document.getElementById('btn-pull'),
+            Legs: document.getElementById('btn-legs')
+        };
+
+        function showWorkout(day) {
+            const workoutData = workouts[day];
+            display.innerHTML = ''; // Clear previous content
+
+            const titleElement = document.createElement('h3');
+            titleElement.textContent = workoutData.title;
+            display.appendChild(titleElement);
+
+            const listElement = document.createElement('ul');
+
+            workoutData.exercises.forEach(exercise => {
+                const listItem = document.createElement('li');
+                const nameElement = document.createElement('strong');
+                nameElement.textContent = exercise.name;
+                const detailsElement = document.createElement('span');
+                detailsElement.textContent = exercise.details;
+
+                listItem.appendChild(nameElement);
+                listItem.appendChild(detailsElement);
+                listElement.appendChild(listItem);
+            });
+
+            display.appendChild(listElement);
+
+            // Add note about warm-up/cool-down
+            const noteElement = document.createElement('p');
+            noteElement.className = 'note';
+            noteElement.innerHTML = "<strong>Remember:</strong> Warm up before starting and cool down with stretches afterwards.";
+            display.appendChild(noteElement);
+
+            // Update active button style
+            Object.values(buttons).forEach(btn => btn.classList.remove('active'));
+            if (buttons[day]) {
+                 buttons[day].classList.add('active');
+            }
+        }
+
+         // Optional: Show Push workout by default on page load
+         // window.onload = () => showWorkout('Push');
+
+    </script>
+
+</body>
+</html>
